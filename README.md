@@ -134,7 +134,6 @@ Prerequisites
 Installation
 
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/molecular-playground.git
 git clone https://github.com/ehsan1992-71/molecular-playground.git
 cd molecular-playground
 
