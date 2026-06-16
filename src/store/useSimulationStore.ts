@@ -1,27 +1,50 @@
 import { create } from 'zustand'
 import { transcribeDNA, validateDNA } from '../utils/transcription'
 
+// ۱. تعریف رسمی مراحل انیمیشن
 export type AnimationStep = 
-  | 'IDLE'          // هیچ کاری نشده
-  | 'UNWINDING'     // مارپیچ DNA داره باز میشه
-  | 'TRANSCRIBING'  // RNA Polymerase در حال ساختن mRNA
-  | 'DONE'          // رونویسی تموم شده
+  | 'IDLE'          
+  | 'UNWINDING'     
+  | 'TRANSCRIBING'  
+  | 'DONE'          
 
-  export const useSimulationStore = create((set, get) => ({
-  // ======== DATA (داده‌ها) ========
-  dnaSequence: 'ATGCGTACC',   // توالی DNA پیش‌فرض
-  mrnaSequence: '',           // mRNA ساخته شده (اولش خالیه)
-  errorMessage: '',           // پیام خطا
-  animationStep: 'IDLE',      // مرحله فعلی انیمیشن
-  currentIndex: 0,            // RNA Polymerase روی کدوم نوکلئوتیده؟
-  isPlaying: false,           // انیمیشن در حال پخشه؟
-  speed: 1000,                // سرعت (میلی‌ثانیه)
+// ۲. تعریف رسمی ساختار کل State (این همان چیزی است که TS گمش کرده بود!)
+interface SimulationState {
+  // Data
+  dnaSequence: string
+  mrnaSequence: string
+  errorMessage: string
+  animationStep: AnimationStep
+  currentIndex: number
+  isPlaying: boolean
+  speed: number
+  progress: number
+  attempts: number
+
+  // Actions
+  setDNASequence: (sequence: string) => void
+  startTranscription: () => void
+  pauseTranscription: () => void
+  stepForward: () => void
+  reset: () => void
+  setSpeed: (newSpeed: number) => void
+  advanceAnimation: () => void
+}
+
+// ۳. ساخت Store با استفاده از تایپ تعریف شده
+export const useSimulationStore = create<SimulationState>((set, get) => ({
+  // ======== DATA ========
+  dnaSequence: 'ATGCGTACC',   
+  mrnaSequence: '',           
+  errorMessage: '',           
+  animationStep: 'IDLE',      
+  currentIndex: 0,            
+  isPlaying: false,           
+  speed: 1000,                
   progress: 0, 
-  attempts:0,               // درصد پیشرفت
+  attempts: 0,               
 
-  // ======== ACTIONS (کارهایی که می‌تونیم انجام بدیم) ========
-
-  // ست کردن توالی DNA (وقتی کاربر تایپ می‌کنه)
+  // ======== ACTIONS ========
   setDNASequence: (sequence: string) => {
     const upper = sequence.toUpperCase()
     const validation = validateDNA(upper)
@@ -36,10 +59,9 @@ export type AnimationStep =
     })
   },
 
-  // شروع رونویسی
   startTranscription: () => {
     const state = get()
-    if (state.errorMessage) return // اگر خطا داره، شروع نکن
+    if (state.errorMessage) return 
     const mrna = transcribeDNA(state.dnaSequence)
     set({
       mrnaSequence: mrna,
@@ -51,12 +73,10 @@ export type AnimationStep =
     })
   },
 
-  // توقف موقت
   pauseTranscription: () => {
     set({ isPlaying: false })
   },
 
-  // یک مرحله جلو رفتن (Step by Step)
   stepForward: () => {
     const state = get()
     if (state.animationStep === 'IDLE' || state.animationStep === 'DONE') return
@@ -78,7 +98,6 @@ export type AnimationStep =
     }
   },
 
-  // بازنشانی کامل
   reset: () => {
     set({
       mrnaSequence: '',
@@ -90,12 +109,10 @@ export type AnimationStep =
     })
   },
 
-  // تنظیم سرعت
   setSpeed: (newSpeed: number) => {
     set({ speed: newSpeed })
   },
 
-  // یک قدم خودکار (برای useEffect توی App.tsx)
   advanceAnimation: () => {
     const state = get()
     if (!state.isPlaying) return
