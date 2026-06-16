@@ -11,6 +11,7 @@ function App() {
   const isPlaying = useSimulationStore((state) => state.isPlaying)
   const speed = useSimulationStore((state) => state.speed)
   const advanceAnimation = useSimulationStore((state) => state.advanceAnimation)
+  const attempts = useSimulationStore((state) => state.attempts)
 
   // این useEffect مثل یه موتور عمل می‌کنه
   // هر وقت isPlaying=true باشه، هر ثانیه یه قدم جلو می‌ره
@@ -41,6 +42,7 @@ function App() {
             <ControlPanel />
           </div>
         </div>
+        <p className="text-gray-400 text-sm">تعداد تلاش‌ها: {attempts}</p>
       </div>
     </div>
   )

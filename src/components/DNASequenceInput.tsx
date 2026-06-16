@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 export default function DNASequenceInput() {
   // state محلی برای نگه‌داری مقدار ورودی
-  const [sequence, setSequence] = useState('ATGCGTACC')
+  const [sequence, setSequence] = useState('ATGCGTAGG')
   const [error, setError] = useState('')
 
   // تابعی که هر بار کاربر تایپ می‌کنه صدا زده میشه
@@ -12,8 +12,8 @@ export default function DNASequenceInput() {
     
     if (!valid) {
       setError('فقط حروف A, T, C, G مجاز هستند')
-    } else if (upperValue.length > 30) {
-      setError('حداکثر ۳۰ نوکلئوتید')
+    } else if (upperValue.length > 50) {
+      setError('حداکثر 50 نوکلئوتید')
     } else {
       setError('')
     }
@@ -47,7 +47,7 @@ export default function DNASequenceInput() {
       )}
       
       <p className="text-gray-500 text-xs mt-2 text-right">
-        {sequence.length} / ۳۰ نوکلئوتید
+        {sequence.length} / 50 نوکلئوتید
       </p>
     </div>
   )

@@ -16,7 +16,8 @@ export type AnimationStep =
   currentIndex: 0,            // RNA Polymerase روی کدوم نوکلئوتیده؟
   isPlaying: false,           // انیمیشن در حال پخشه؟
   speed: 1000,                // سرعت (میلی‌ثانیه)
-  progress: 0,                // درصد پیشرفت
+  progress: 0, 
+  attempts:0,               // درصد پیشرفت
 
   // ======== ACTIONS (کارهایی که می‌تونیم انجام بدیم) ========
 
@@ -46,6 +47,7 @@ export type AnimationStep =
       isPlaying: true,
       currentIndex: 0,
       progress: 0,
+      attempts: state.attempts + 1,
     })
   },
 
@@ -84,6 +86,7 @@ export type AnimationStep =
       currentIndex: 0,
       isPlaying: false,
       progress: 0,
+      attempts: 0,
     })
   },
 
