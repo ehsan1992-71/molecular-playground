@@ -4,7 +4,6 @@ import { splitIntoCodons } from '../utils/transcription'
 export default function SequenceOutput() {
   const mrnaSequence = useSimulationStore((state) => state.mrnaSequence)
   
-  
   const codons = splitIntoCodons(mrnaSequence)
   
   const codonColors = [
